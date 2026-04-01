@@ -1,0 +1,410 @@
+Project experiance
+------------------------------------------------------------------------------------
+“I worked on a Spring Boot-based microservices application for an e-commerce system.
+It had services like user-service, product-service, and order-service.
+We used REST APIs for communication, MySQL for persistence, and deployed using Docker containers.
+We followed layered architecture and handled inter-service communication using REST and sometimes async messaging.”
+------------------------------------------------------------------------------------
+
+SPRING BOOT
+
+🔥 1. What is Spring Boot & Why used?
+✅ Answer
+Spring Boot is used to build production-ready applications quickly with minimal configuration.
+
+💡 Scenario
+“In my project, we built a Payment Service using Spring Boot because it reduced setup time and we could focus more on business logic instead of configuration.”
+
+🎯 Key Points
+Auto configuration
+Embedded server (Tomcat)
+Starter dependencies
+---------------------------------------------------------------------------------------------------
+🔥 2. How does Auto-Configuration work?
+✅ Answer
+
+Spring Boot automatically configures beans based on:
+
+=====dependencies in classpath
+=====properties file
+
+💡 Scenario
+“If I add spring-boot-starter-data-jpa, Spring Boot automatically configures:
+---DataSource    ==> where in which type of DataBases like mysql or oracle or H2 Db or ,mongodb etc and their paths(which is added in Application.properties
+---EntityManager ==> this one is like Table structure related 
+---Hibernate”    ==> this takes care by converting java code to Mysql understandable code like JPAs are converted to mysql queries
+
+🎯 Behind the scenes
+@EnableAutoConfiguration
+spring.factories (or AutoConfiguration imports)
+---------------------------------------------------------------------------------------------------
+🔥 3. @Component vs @Service vs @Repository
+✅ Answer
+
+All are same internally but used for clarity.
+
+Annotation	Use
+@Component	Generic
+@Service	Business logic
+@Repository	DB layer + exception translation
+💡 Scenario
+
+“In Order Service:
+
+@RestController → API layer
+@Service → business logic
+@Repository → DB operations”
+------------------------------------------------------------------------------------
+🔥 4. @Autowired vs Constructor Injection (IMPORTANT)
+✅ Answer
+
+Constructor Injection is preferred.
+
+💡 Scenario
+“In my project, we used constructor injection to make classes immutable and easier to test."
+
+🎯 Why?
+avoids NullPointerException
+better for unit testing
+mandatory dependencies
+------------------------------------------------------------------------------------
+🔥 5. What is @RestController?
+✅ Answer
+
+Combination of:
+
+@Controller + @ResponseBody
+💡 Scenario
+
+“When client calls /orders, controller returns JSON response.”
+------------------------------------------------------------------------------------
+
+🔥 6. How Exception Handling is done?
+✅ Answer
+
+Using:
+
+@ControllerAdvice
+@ExceptionHandler
+💡 Scenario
+
+“If payment fails, instead of returning stack trace, we return:
+
+{
+  "message": "Payment Failed",
+  "status": 500
+}
+------------------------------------------------------------------------------------
+🔥 7. What is @Transactional?
+✅ Answer
+
+Ensures all DB operations succeed or rollback.
+
+💡 Scenario
+
+“While placing order:
+
+save order
+reduce stock
+make payment
+
+If payment fails → rollback everything”
+------------------------------------------------------------------------------------
+🔥 8. How do you connect to DB?
+✅ Answer
+
+Using:
+
+Spring Data JPA
+application.properties
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+💡 Scenario
+
+“In dev we used H2, in production MySQL”
+------------------------------------------------------------------------------------
+🔥 9. What is Spring Data JPA?
+✅ Answer
+
+It reduces boilerplate code for DB operations.
+
+💡 Example
+interface UserRepo extends JpaRepository<User, Long>
+
+No need to write SQL.
+------------------------------------------------------------------------------------
+🔥 10. Difference: @GetMapping vs @PostMapping
+✅ Answer
+Method	Use
+GET	Fetch data
+POST	Create data
+💡 Scenario
+GET /orders → fetch
+POST /orders → create order
+------------------------------------------------------------------------------------
+🔥 11. How Microservices communicate?
+✅ Answer
+REST APIs (sync)
+Kafka/RabbitMQ (async)
+💡 Scenario
+“Order Service → calls Payment Service using REST”      ---> ex: U called someone the other person needs to lift the call to anser , here u wait for response
+
+OR
+
+“Order placed → event sent → Payment consumes”        --> ex: U sends a wtusp messge  , he may see later , ie no waiting for response the event driven things like 
+------------------------------------------------------------------------------------
+12. What is application.properties?
+✅ Answer
+
+Used for configuration:
+
+DB configuration
+server port
+custom values
+
+server.port=8081
+------------------------------------------------------------------------------------
+🔥 13. Profiles in Spring Boot
+✅ Answer
+
+Different configs for environments
+
+💡 Scenario
+dev → local DB
+prod → cloud DB
+spring.profiles.active=dev
+------------------------------------------------------------------------------------
+🔥 14. What is @SpringBootApplication?
+✅ Answer
+
+Combination of:
+
+@Configuration
+@EnableAutoConfiguration
+@ComponentScan
+------------------------------------------------------------------------------------
+🔥 15. What is Component Scan?
+✅ Answer
+
+Spring scans packages and creates beans automatically.   ---> beans nothing but objects with all inside requried fields based on the given configuration 
+
+💡 Scenario
+“If service class is outside base package → bean not created”
+------------------------------------------------------------------------------------
+🔥 16. What is Bean Lifecycle?
+✅ Flow
+Object created
+Dependencies injected
+init method
+ready to use
+destroy method
+------------------------------------------------------------------------------------
+🔥 17. What is Actuator?
+✅ Answer
+
+Used for monitoring app.
+
+💡 Scenario
+“We used Actuator to check:
+health
+metrics
+memory usage”
+------------------------------------------------------------------------------------
+🔥 18. What is Spring Boot Starter?
+✅ Answer
+
+Predefined dependency bundles.
+
+💡 Example
+spring-boot-starter-web
+
+Includes:
+Tomcat
+Spring MVC
+------------------------------------------------------------------------------------
+🔥 19. What challenges you faced? (VERY IMPORTANT)
+💡 Real Answer Example
+
+👉 “We faced circular dependency issue between services”
+
+Solution:
+Used constructor injection
+Refactored design
+
+👉 “Database performance issue”
+
+Solution:
+Added indexing
+------------------------------------------------------------------------------------
+🔥 20. How do you handle large data?
+✅ Answer
+Pagination
+Streaming
+Batch processing
+------------------------------------------------------------------------------------
+🔥 21. How security is handled?
+✅ Answer
+
+Using Spring Security + JWT
+
+💡 Scenario
+“User logs in → gets token → sends token in every request”
+------------------------------------------------------------------------------------\
+🔥 22. How do you test Spring Boot apps?
+✅ Answer
+Unit testing → JUnit + Mockito
+Integration testing → @SpringBootTest
+
+
+🎯 Super Simple Analogy
+Tool	Real Life Example
+JUnit	: Teacher checking your answers  :  like writing test cases and validating answers produced by method is correct or not.
+Mockito	Fake exam environment  : ie the same dependencies and all servie
+
+“In my project, I used Mockito to mock repository and external API calls, and JUnit to validate business logic.
+This helped in faster testing and avoided dependency issues.”
+------------------------------------------------------------------------------------
+🔥 23. What is @Value and @ConfigurationProperties?
+✅ Answer
+
+Used to read properties
+
+@Value("${app.name}")
+------------------------------------------------------------------------------------
+🔥 24. What is CORS?   cross origin resource sharing
+✅ Answer
+
+Allows frontend (React/Angular) to call backend.    this will be on starting line in the controller layer
+------------------------------------------------------------------------------------
+🔥 25. What is Logging?
+✅ Answer
+
+Using:
+
+SLF4J
+Logback
+
+🎯 One-Line Interview Answer:
+
+“Logging is used to track application flow and errors. In my project, 
+I used SLF4J as a logging facade and Logback as the implementation to log messages at different levels like INFO, DEBUG, and ERROR.”
+
+🔥 25. What is Logging?
+✅ Answer (Interview Ready)
+
+Logging is used to record application events, errors, and flow during execution so that we can monitor, debug, and trace issues in real-time or production.
+
+🧠 Real-Time Explanation
+
+In day-to-day projects:
+
+We don’t use System.out.println()
+Instead, we use logging frameworks like:
+SLF4J → Logging API (interface)
+Logback → Logging implementation (actual engine)
+
+🔄 How They Work Together
+Application Code → SLF4J → Logback → Console / File / Server
+SLF4J = abstraction (what you call)
+Logback = implementation (what actually logs)
+
+💻 Example (Real Project Style)
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+class OrderService {
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+    public void placeOrder() {
+        log.info("Order started");
+        try {
+            // business logic
+            log.debug("Processing payment");
+        } catch (Exception e) {
+            log.error("Error occurred while placing order", e);
+        }
+        log.info("Order completed");
+    }
+}
+------------------------------------------------------------------------------------
+1)How did you structure your Spring Boot project?
+👉 Answer:
+Controller → Service → Repository
+DTO layer for API communication
+Entity for DB mapping
+
+Controller → handles requests // the request cmg from enduser where to go ie to particular controller , this is done by Dispatcher Servler duty 
+Service → business logic   // from controller the request goes to the suitable service layer method 
+Repository → DB interaction (JPA)  // from service layer to repository layer which makes changes in the actual DB
+------------------------------------------------------------------------------------
+2)How do you handle exception handling?
+👉 Answer:
+“We used @ControllerAdvice with @ExceptionHandler to handle global exceptions.”
+
+CODE:
+@ControllerAdvice
+public class GlobalExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return ResponseEntity.status(500).body(e.getMessage());
+    }
+}
+------------------------------------------------------------------------------------
+3)How do you manage configuration?
+👉 Answer:
+
+application.properties / yaml  --> controlled by Spring Boot 
+profiles (dev, test, prod)    
+spring.profiles.active=dev
+POM.XML --> Controlled by maven or gradle
+------------------------------------------------------------------------------------
+4)How do services communicate?
+👉 Answer:
+
+REST APIs using RestTemplate / WebClient 
+1. REST APIs (Synchronous Communication)
+👉 What it is:
+One service directly calls another service using HTTP (like GET, POST).
+
+👉 Example:
+Order Service calls Payment Service
+POST /payment
+
+👉 Flow:
+User places order
+Order Service sends request to Payment Service
+Payment Service processes payment
+Sends response back (success/failure)
+
+👉 Key Points:
+Synchronous → caller waits for response
+Tightly coupled (Order depends on Payment availability)
+Simple & easy to debug
+
+👉 Real-life analogy:
+Like making a phone call → you wait until the other person responds
+
+2. Messaging (Asynchronous Communication)
+👉 What it is:
+Services communicate via a message broker (Kafka, RabbitMQ) using events.
+
+👉 Example:
+Order placed → event sent → Payment Service listens
+
+👉 Flow:
+Order Service publishes event: OrderCreated
+Message goes to Kafka/RabbitMQ
+Payment Service consumes the event
+Processes payment independently
+
+👉 Key Points:
+Asynchronous → no waiting
+Loosely coupled (services don’t depend directly)
+Highly scalable & resilient
+
+👉 Real-life analogy:
+Like sending a WhatsApp message → receiver replies later
+------------------------------------------------------------------------------------
+5). How do you validate input? //validations you done in frontend angular project inside the registration only frontend validations done by u right those in backend using these.
+👉 Answer:
+@Valid, @NotNull, @Size
+------------------------------------------------------------------------------------
