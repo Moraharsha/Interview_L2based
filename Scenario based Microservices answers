@@ -1,0 +1,192 @@
+🔥 1. You said you used REST… why not Kafka everywhere?
+❓ Trap
+They check if you blindly use one approach.
+
+✅ Answer
+“REST is good for immediate response scenarios like payment confirmation.
+Kafka is better for async tasks like sending emails or updating analytics.
+Using Kafka everywhere would increase complexity and delay critical responses.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 2. If Payment fails after Order is created, what happens?
+❓ Trap
+Checks distributed transaction knowledge.
+
+✅ Answer
+“We handle it using Saga pattern.
+If payment fails, we trigger a compensating transaction to cancel the order or mark it as FAILED.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 3. How do services find each other in production?
+❓ Trap
+They want real infra answer, not “localhost”.
+
+✅ Answer
+“We use service discovery like Eureka or Kubernetes DNS.
+Services register themselves, and others call using service name instead of hardcoded URL.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 4. What happens if Service Discovery is down?
+❓ Trap
+Failure scenario thinking.
+
+✅ Answer
+“Already running services continue working using cached registry.
+But new services may not register.
+To avoid this, we deploy discovery in high-availability mode.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 5. How do you avoid duplicate payments?
+❓ Trap
+Checks idempotency.
+
+✅ Answer
+“We use idempotency keys or unique transaction IDs.
+Even if the request comes twice, it will process only once.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 6. How do you debug issues across microservices?
+❓ Trap
+Real-world debugging.
+
+✅ Answer
+“We use distributed tracing tools like Sleuth + Zipkin and centralized logging (ELK).
+Each request has a trace ID to track across services.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 7. You said each service has its own DB… then how do you join data?
+❓ Trap
+Classic tricky question.
+
+✅ Answer
+“We avoid DB joins across services.
+Instead, we use API composition or event-based data replication.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 8. Why not use a single shared database?
+❓ Trap
+Architecture clarity.
+
+✅ Answer
+“Shared DB creates tight coupling.
+Any schema change affects multiple services, defeating microservices benefits.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 9. What if one service is very slow?
+❓ Trap
+Performance handling.
+
+✅ Answer
+“We use timeout + circuit breaker.
+If response takes too long, fallback logic is executed.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 10. How do you secure microservices?
+❓ Trap
+Security depth.
+
+✅ Answer
+“We use JWT tokens for authentication.
+API Gateway validates token and forwards request to services.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 11. What happens if Kafka message is lost?
+❓ Trap
+Reliability understanding.
+
+✅ Answer
+“Kafka ensures durability using replication.
+We also configure acknowledgements (acks=all) to avoid data loss.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 12. What if a message is consumed twice?
+❓ Trap
+Duplicate handling.
+
+✅ Answer
+“We make consumers idempotent so processing same message twice doesn’t affect data.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 13. How do you handle versioning of APIs?
+❓ Trap
+Backward compatibility.
+
+✅ Answer
+“We use versioning like /v1, /v2 or header-based versioning to avoid breaking existing clients.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 14. Why API Gateway? Why not direct calls?
+❓ Trap
+Design reasoning.
+
+✅ Answer
+“Gateway centralizes authentication, routing, and logging.
+Without it, each service would handle these separately.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 15. What is the biggest challenge you faced?
+❓ Trap
+They test real experience.
+
+✅ Sample Answer
+“We faced latency due to multiple service calls.
+We optimized using caching and reduced synchronous calls by introducing Kafka.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 16. How do you handle deployment?
+❓ Trap
+DevOps awareness.
+
+✅ Answer
+“We use Docker for containerization and Kubernetes for deployment and scaling.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 17. How do you ensure data consistency?
+❓ Trap
+Advanced concept.
+
+✅ Answer
+“We follow eventual consistency using Saga pattern instead of traditional ACID transactions.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 18. What is fallback?
+❓ Trap
+Resilience concept.
+
+✅ Answer
+“Fallback is a default response when a service fails.
+Example: ‘Payment service unavailable, try later.’”
+--------------------------------------------------------------------------------------------------------------------
+🔥 19. How do you reduce network calls?
+❓ Trap
+Optimization thinking.
+
+✅ Answer
+“We use caching, API aggregation, and async communication.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 20. Why microservices sometimes fail in companies?
+❓ Trap
+Maturity check.
+
+✅ Answer
+“Due to over-complexity, lack of monitoring, improper service boundaries, and poor DevOps practices.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 21. How do you test microservices?
+❓ Trap
+Testing strategy.
+
+✅ Answer
+“Unit testing with JUnit & Mockito, integration testing with TestContainers, and contract testing.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 22. What is contract testing?
+❓ Trap
+Advanced testing concept.
+
+✅ Answer
+“Ensures API compatibility between services using tools like Pact.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 23. What is throttling / rate limiting?
+❓ Trap
+Production-level thinking.
+
+✅ Answer
+“Limits number of requests per user to avoid overload.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 24. How do you handle configuration changes?
+❓ Trap
+Dynamic config.
+
+✅ Answer
+“Using Spring Cloud Config with refresh endpoints.”
+--------------------------------------------------------------------------------------------------------------------
+🔥 25. Why NOT microservices?
+❓ Trap (VERY IMPORTANT)
+
+✅ Answer
+“For small applications, microservices add unnecessary complexity.
+Monolith is better when scale and team size are small.”
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
