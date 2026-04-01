@@ -1,0 +1,548 @@
+🔥 1. What are Microservices?
+✅ Answer
+Microservices is an architecture where an application is split into small independent services, each responsible for a single business capability.
+
+🧠 Scenario
+E-commerce app:
+
+User Service
+Order Service
+Payment Service
+Inventory Service
+
+Instead of one big monolith → each runs independently.
+
+🎯 Interview Expectation
+Say:
+“Each service is independently deployable, loosely coupled, and communicates via REST or messaging.”
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 2. Monolith vs Microservices
+✅ Answer
+Monolith	Microservices
+Single codebase	Multiple services
+Hard to scale	Easy to scale individually
+Tight coupling	Loose coupling
+🧠 Scenario
+
+Payment issue → in monolith → Redeploy entire app
+In microservices → only Payment Service deploy
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 3. How do Microservices communicate?
+✅ Answer
+
+Two ways:
+
+Synchronous (REST API)
+Asynchronous (Kafka / RabbitMQ)
+🧠 Scenario
+
+Order placed:
+
+Sync → Order calls Payment API   { like u called to ur friend until he lifts u cannot speak similalry}
+Async → Order sends event → Payment listens    {u sent wtusp message to u r friend he will see and responds mean while u just sends and do will left from}
+🎯 Tip
+
+Say:
+
+“We use async communication to avoid tight coupling and improve performance. {like Kafka/RabbitMQ-> event Driven}
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 4. What is API Gateway?
+✅ Answer
+It is a microservice first
+Single entry point for all client requests.
+
+🧠 Scenario
+
+Client → API Gateway → routes to:
+
+/orders → Order Service
+/users → User Service
+🎯 Why needed?
+Security
+Routing
+Rate limiting
+
+
+🔥 What is Rate Limiting?
+✅ Interview Answer
+
+Rate limiting is a technique used to control the number of requests a user/client can make to an API within a specific time period.
+
+🧠 Simple Explanation
+
+“Rate limiting prevents users from sending too many requests in a short time, protecting the system from overload or abuse.”
+
+🏢 Real-Time Example
+💼 Scenario: Login API
+Max 5 requests per minute per user
+If user exceeds:
+→ API returns HTTP 429 (Too Many Requests)
+User → Login API (5 times allowed)
+6th request → BLOCKED ❌
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 5. What is Service Discovery?      example:  Eureka server we include all the urls are stored there and then insde serices will be communicate from here
+✅ Answer
+Helps services find each other dynamically.
+
+🧠 Scenario
+Payment Service doesn’t know Order Service URL → uses Eureka/Consul.
+
+🎯 Interview Line
+“Instead of hardcoding URLs, services register themselves and discover others.”
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 2. Eureka + Feign client (Real Interview Flow)     // very simple 
+
+Think there is Order service and payment Service
+In Eureka all the Instances ie Ports and Urls are stored of Payment service assume 
+step:1->  see below u will understand easily 
+
+This is very important — explain like this in interview 👇
+
+🔹 Architecture Diagram
+         [ Eureka Server ]
+          /     |      \
+         /      |       \
+ [Order Service] [Payment Service - I1]
+                  [Payment Service - I2]
+                  [Payment Service - I3]
+🔹 Step-by-Step Flow
+1. Service Registration
+Payment Service instances register in Eureka:
+PAYMENT-SERVICE → 3 instances (8081, 8082, 8083)
+--------
+2. Order Service uses Feign Client
+----------------
+3. What happens internally?
+👉 When Order Service calls:
+
+Behind the scenes:
+Feign(order service sends request) asks Eureka:
+👉 “Give me instances of PAYMENT-SERVICE”
+Eureka returns:
+[8081, 8082, 8083]
+
+==Spring Cloud LoadBalancer picks one
+(default = Round Robin)
+-----------------------------------
+Request goes to selected instance
+🔹 Actual Flow
+Order Service
+     |
+     | (Feign Call)
+     v
+Eureka Server → returns instance list
+     |
+     v
+Load Balancer → selects one instance
+     |
+     v
+Payment Service (one instance)
+
+)
+🔹 How to say in interview (Golden Answer)
+👉
+“Feign client first fetches available instances from Eureka, then Spring Cloud LoadBalancer selects one instance using Round Robin algorithm and sends the request.”
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 7. What is Circuit Breaker?
+✅ Answer
+
+Prevents cascading failures when one service is down.
+
+🧠 Scenario
+Payment Service down → Order Service:
+
+Stops calling it
+Returns fallback response
+Tools:
+Resilience4j
+🎯 Line
+
+“It avoids system-wide failure.”
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 8. What is Fault Tolerance?
+✅ Answer
+System continues working even if some services fail.
+
+🧠 Scenario
+Payment fails → Order still saved as “PENDING”
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 9. What is Distributed Tracing?
+✅ Answer
+Tracking a request across multiple services.
+
+🧠 Scenario
+User request flows:
+
+API Gateway → Order → Payment → Inventory
+
+Use:
+Zipkin / Sleuth
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 10. What is Centralized Logging?
+✅ Answer
+
+Logs from all services stored in one place.
+
+🧠 Scenario
+Use ELK Stack:  ELK full forms are below words
+
+Elasticsearch
+Logstash
+Kibana
+-----------------------------------------------------------------------------------------------------------------------------
+
+🔥 What is Config Server?
+
+👉 Config Server = Centralized configuration management system
+
+Instead of storing configs in every microservice,
+👉 we keep them in one central place and all services fetch from there.
+
+🔹 Why do we need it?
+❌ Without Config Server:
+
+Each service has its own config:
+
+Order Service → application.properties
+Payment Service → application.properties
+User Service → application.properties
+
+👉 Problem:
+Duplicate configs (DB URL, API keys)
+Hard to update
+Need redeploy for every change
+✅ With Config Server:
+             [ Config Server ]
+                    |
+        --------------------------
+        |           |            |
+   Order Service  Payment   User Service
+
+👉 All services fetch configs from one place
+
+-----------------------------------------------------------------------------------------------------------------------------
+Where configs are stored?
+
+👉 Usually in Git Repository
+
+Example:
+
+config-repo/
+   order-service.yml
+   payment-service.yml
+   application.yml   (common configs)
+🔹 Architecture Diagram
+        [ Git Repo ]
+             |
+             v
+      [ Config Server ]
+             |
+   -----------------------
+   |         |           |
+[Order]   [Payment]   [User]
+ Service    Service    Service
+🔹 How it works (Step-by-step)
+1. Config Server starts
+Connected to Git repo
+2. Microservice starts (e.g., Order Service)
+
+👉 It calls Config Server:
+
+GET /order-service/default
+3. Config Server responds
+
+Returns:
+
+DB URL
+Username
+Password
+Other configs
+4. Service uses these configs at runtime
+🔹 Spring Boot Code (Basic)
+✅ Config Server
+@EnableConfigServer
+@SpringBootApplication
+public class ConfigServerApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+}
+application.yml
+server:
+  port: 8888
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/your-repo/config-repo
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 12. Database per Service?
+✅ Answer
+
+Each microservice should have its own database.
+
+🧠 Scenario
+Order DB ≠ Payment DB
+
+🎯 Why?
+Avoid tight coupling
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 13. What is Saga Pattern?
+✅ Answer
+Manages distributed transactions.
+
+🧠 Scenario
+Order placed:
+
+Order created
+Payment failed → rollback order
+
+Two types:
+Choreography
+Orchestration
+
+🔹 1. Choreography (Event-Based)
+
+👉 No central controller
+👉 Services communicate via events (Kafka/RabbitMQ)
+
+Flow:
+Order Created → Event
+       ↓
+Payment Service listens → tries payment
+       ↓
+Payment Failed → Event
+       ↓
+Order Service listens → cancels order
+========================================
+🔹 2. Orchestration (Central Controller)
+
+👉 One service controls everything (Orchestrator)
+
+Flow:
+Orchestrator → Order Service (create)
+Orchestrator → Payment Service (pay)
+If fail:
+Orchestrator → Order Service (cancel)
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 14. What are Challenges in Microservices?
+✅ Answer
+Network latency
+Data consistency
+Debugging
+Deployment complexity
+
+🧠 Real Answer
+“We faced latency between services, solved using caching and async communication.”
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 15. How do you handle Security?
+✅ Answer
+JWT Authentication
+OAuth2
+
+🧠 Scenario
+User logs in → gets token → passes in every request
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 16. What is Idempotency?
+✅ Answer
+Same request → same result (no duplicate effect)
+
+🧠 Scenario
+Payment API called twice → should not deduct twice
+-----------------------------------------------------------------------------------------------------------------------------
+DOCKER & KUBERNATIES  RELATES EACH OTHER AND  MAINLY Docker depends on kubernates 
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 18. What is Docker in Microservices?
+✅ Answer
+Containerizes each service.
+
+🧠 Scenario
+Each service runs in its own container
+-----------------------------------------------------------------------------------------------------------------------------
+
+🧠 Why Docker in Microservices?
+
+In microservices:
+
+You have multiple small services
+Each service may need:
+Different Java versions
+Different configs
+Different dependencies
+
+👉 Docker solves this by:
+➡️ Running each service in its own isolated container
+-----------------------------------------------------------------------------------------------------------------------------
+🧠 Real-Time Scenario (Very Important for L2)
+🏢 E-commerce Application
+
+You have:
+
+Order Service (Java 17)
+Payment Service (Java 11)
+Inventory Service (Node.js)
+Notification Service (Python)
+
+❌ Without Docker:
+
+Install all runtimes manually
+Version conflicts
+Works on dev, fails in prod 😓
+
+✅ With Docker:
+
+Each service has its own container:
+Order → Docker container with Java 17
+Payment → Docker container with Java 11
+Inventory → Node container
+All run independently without conflicts
+-----------------------------------------------------------------------------------------------------------------------------
+❓ Why not use Docker alone?
+
+👉 Docker runs containers, but:
+
+No auto-scaling
+No self-healing
+No load balancing
+
+➡️ Kubernetes handles all this
+
+🚀 Simple Analogy (Easy to remember)
+Docker = Pack food into boxes
+Kubernetes = Manage delivery of those boxes at scale
+-----------------------------------------------------------------------------------------------------------------------------
+❓ What happens if a container crashes?
+👉 Kubernetes automatically restarts it (self-healing)
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 19. What is Kubernetes?
+✅ Answer
+
+Manages containers:
+
+Scaling
+Deployment
+Healing
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 21. What is Event-Driven Architecture?   like Kafka/RabbitQ
+✅ Answer
+
+Services communicate via events.
+
+🧠 Scenario
+Order placed → event → multiple services react
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 22. What is Retry Mechanism?
+✅ Answer
+Retry failed requests automatically.
+
+🧠 Scenario
+Payment failed → retry 3 times
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 23. What is Timeout?
+✅ Answer
+Max wait time for response.
+-----------------------------------------------------------------------------------------------------------------------------
+🔥 24. What is Bulkhead Pattern?
+✅ Answer
+Isolate failures.
+
+🧠 Scenario
+Payment failure should not affect User Service
+-----------------------------------------------------------------------------------------------------------------------------
+
+🔥 25. Real Project Question (VERY IMPORTANT)
+❓ “Explain your microservices project”
+✅ Answer Structure
+
+Say like this:
+
+“We built an e-commerce system with microservices architecture.
+Order Service handles order creation, Payment Service handles transactions, Inventory Service manages stock.
+We used REST for synchronous calls and Kafka for async communication.
+Eureka for service discovery, API Gateway for routing, and Resilience4j for fault tolerance.
+Each service has its own database.
+We stored in docker and Managed via Kubernates ,Jenkins CI/CD pipeline
+We faced latency issues which we solved using caching and async messaging.”
+-----------------------------------------------------------------------------------------------------------------------------
+“In my project, we built an e-commerce platform using microservices architecture.
+We had services like Order, Payment, Inventory, and User.
+We used REST for synchronous communication and Kafka for asynchronous events.
+For service discovery, we used Eureka and API Gateway for routing and security.
+Each service had its own database to ensure loose coupling.
+We implemented fault tolerance using Resilience4j with circuit breaker and retry mechanisms.
+For distributed transactions, we used Saga pattern.
+We also implemented centralized logging using ELK and distributed tracing using Zipkin.
+One major challenge we faced was latency due to multiple service calls, which we solved using caching and async messaging.”
+-----------------------------------------------------------------------------------------------------------------------------
+
+🔄 15. CI/CD
+Jenkins pipeline
+Automated build & deployment
+-----------------------------------------------
+🧪 16. Testing Strategy
+Unit → JUnit + Mockito
+Integration → TestContainers
+API Testing → Postman
+------------------------------------------------
+🔥 17. REAL CHALLENGES (MUST SAY)
+💥 Challenge 1: Service Latency
+Fixed using caching + async communication
+
+💥 Challenge 2: Debugging
+Solved using distributed tracing
+
+💥 Challenge 3: Data Consistency
+Used Saga pattern
+-----------------------------------------------------------------------------------------------------------------------------
+⚡ 13. Performance Optimization
+Problems we faced:
+
+❌ High latency due to multiple service calls
+✅ Solutions:
+Introduced Kafka (async)
+Used Redis caching
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+  SOME RELATED TO DATABASE
+
+===========================
+2. How to optimize queries?
+
+👉 Answer:
+Indexing
+Avoid SELECT *
+Use joins properly
+-----------------------------------------------------------------------------------------------------------------------------
+4. What is indexing?
+👉 Answer:
+“Improves query performance by faster lookup.”
+-----------------------------------------------------------------------------------------------------------------------------
+5. ACID properties?
+👉 Answer:
+Atomicity
+Consistency
+Isolation
+Durability
+-----------------------------------------------------------------------------------------------------------------------------
+
+SOME RELATED TO ANGULAR
+-----------------------------------------------------------------------------------------------------------------------------
+🅰️ ANGULAR BASIC (JUST SURVIVE QUESTIONS)
+1. What is Angular?
+👉 Frontend framework (TypeScript)
+
+2. How Angular talks to backend?
+👉 Answer:  HTTP Client → REST API calls
+
+3. Components?
+👉 Answer: UI building blocks
+
+4. Data binding?
+👉 Answer:  Connect UI ↔ data
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
