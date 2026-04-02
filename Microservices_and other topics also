@@ -579,3 +579,27 @@ ELK → Open-source, more setup
 👉 SLF4J = Camera 📷 (captures data)
 👉 Splunk = CCTV Monitor 📺 (analyzes & shows data)
 -----------------------------------------------------------------------------------------------------------------------------
+“I worked on a banking migration project where we moved a monolithic system to Spring Boot-based microservices.
+
+The architecture includes an API Gateway for routing, Eureka as service registry, and multiple services like Publisher and Subscriber services.
+
+The request flow starts from the client hitting the API Gateway, which routes to the appropriate microservice. For synchronous communication,
+we used REST APIs, and for asynchronous communication, we used Kafka, especially for event-driven flows like transaction processing.
+
+We implemented the Saga pattern to handle distributed transactions across services.
+
+For CI/CD, we used Jenkins to build and deploy applications. Each service was containerized using Docker and deployed on Kubernetes for scalability and fault tolerance.
+
+For logging, we used SLF4J and monitored logs using the ELK stack for debugging and production monitoring.
+
+My role involved developing REST APIs, integrating Kafka consumers/producers, and handling production issues using logs and monitoring tools.”
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+“We used Kafka for asynchronous communication when a request didn’t need an immediate response.
+
+For example, in the banking migration project, when a transaction was created in the Publisher service,
+we didn’t want the user to wait for downstream services like notification or ledger updates. So the Publisher service produced a Kafka message to a topic transaction-events. The Subscriber service consumed the message asynchronously and processed the ledger entry and notification.
+
+This solved latency issues and decoupled services. If a consumer was down,
+Kafka retained messages until it was back, ensuring reliability. For fast-response requirements, like checking account balance, we used synchronous REST APIs.”
