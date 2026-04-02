@@ -1,0 +1,236 @@
+❓ 1. What happens internally when you run a Spring Boot app?
+
+👉 Answer:
+@SpringBootApplication triggers:
+@EnableAutoConfiguration
+@ComponentScan
+Spring Boot:
+Creates ApplicationContext
+Scans beans
+Applies auto-configuration
+Starts embedded server (Tomcat)
+
+🧠 Smart line:
+👉 “Spring Boot bootstraps the application by auto-configuring beans and starting an embedded server.”
+---------------------------------------------------------------------------------------------------------------------
+❓ 2. Difference: @Component vs @Bean (very tricky)
+
+👉 Answer:
+@Component	                  @Bean
+Auto-detected	               Manually defined
+Class-level	                 Method-level
+Used for your classes	       Used for third-party classes
+
+🧠 Example:
+@Component → your service
+@Bean → ObjectMapper, DataSource
+---------------------------------------------------------------------------------------------------------------------
+❓ 3. What is AutoConfiguration? How does it work?
+👉 Answer: Spring Boot automatically configures beans based on:
+Classpath
+Properties
+Conditions
+
+👉 Uses:
+@ConditionalOnClass
+@ConditionalOnMissingBean
+
+🧠 Example:
+If MySQL dependency present → DataSource auto-configured
+---------------------------------------------------------------------------------------------------------------------
+
+❓ 4. What if two beans of same type exist?
+👉 Answer: Spring throws:  NoUniqueBeanDefinitionException
+👉 Solution: @Primary , @Qualifier
+---------------------------------------------------------------------------------------------------------------------
+❓ 5. @RestController vs @Controller
+
+👉 Answer:
+@Controller → returns view (HTML)
+@RestController → returns JSON
+
+👉 Internally:
+@RestController = @Controller + @ResponseBody
+---------------------------------------------------------------------------------------------------------------------
+❓ 6. How does Spring Boot handle dependency injection?
+👉 Answer:
+Using IoC container
+
+Types:
+Constructor injection ✅ (best)
+Setter injection
+Field injection ❌ (not recommended)
+
+🧠 Why constructor?
+👉 Immutable + testable
+---------------------------------------------------------------------------------------------------------------------
+❓ 7. What is Spring Boot Starter?
+
+👉 Answer:  Predefined dependency bundles
+
+Example:
+spring-boot-starter-web
+
+Includes:
+Tomcat
+Spring MVC
+Jackson
+---------------------------------------------------------------------------------------------------------------------
+❓ 8. How does embedded Tomcat work?
+
+👉 Answer:
+Comes inside dependency
+Starts automatically
+No need external server
+
+🧠 Flow:
+main() → SpringApplication.run() → start Tomcat
+---------------------------------------------------------------------------------------------------------------------
+❓ 9. What is application.properties vs YAML?
+👉 Answer:  Both store configs
+
+YAML:
+server:
+  port: 8080
+Properties:
+server.port=8080
+
+👉 YAML is more readable for nested configs
+---------------------------------------------------------------------------------------------------------------------
+❓ 10. How do you handle exceptions globally?
+👉 Answer:
+Use:
+@ControllerAdvice
+@ExceptionHandler
+
+🧠 Scenario:
+Handle all API errors in one place
+---------------------------------------------------------------------------------------------------------------------
+❓ 11. What is Actuator?
+
+👉 Answer:
+Provides production-ready endpoints
+
+Examples:
+/actuator/health
+/actuator/metrics
+---------------------------------------------------------------------------------------------------------------------
+❓ 12. What is @SpringBootApplication?
+
+👉 Answer:
+Combination of:
+
+@Configuration
+@EnableAutoConfiguration
+@ComponentScan
+---------------------------------------------------------------------------------------------------------------------
+❓ 13. What is Bean Lifecycle?
+
+👉 Answer:
+Bean created
+Dependencies injected
+Init method
+Ready to use
+Destroy method
+---------------------------------------------------------------------------------------------------------------------
+❓ 14. @Autowired vs @Inject
+👉 Answer:
+@Autowired → Spring-specific
+@Inject → Java standard (JSR-330)
+---------------------------------------------------------------------------------------------------------------------
+❓ 15. How do you connect DB in Spring Boot?
+👉 Answer:
+Using:
+Spring Data JPA
+application.properties
+spring.datasource.url=...
+spring.jpa.hibernate.ddl-auto=update
+---------------------------------------------------------------------------------------------------------------------
+❓ 16. What is @Transactional (VERY IMPORTANT)
+👉 Answer: Manages DB transactions
+👉 Ensures:
+Commit on success
+Rollback on failure
+
+🧠 Scenario:
+Payment fails → rollback order
+---------------------------------------------------------------------------------------------------------------------
+❓ 17. Why Spring Boot is faster than Spring?
+👉 Answer:
+Auto-configuration
+Embedded server
+No XML config
+---------------------------------------------------------------------------------------------------------------------
+❓ 18. How does Spring Boot handle profiles?
+👉 Answer:
+Use:
+spring.profiles.active=dev
+
+👉 Separate configs:
+dev
+prod
+---------------------------------------------------------------------------------------------------------------------
+❓ 19. What is @Value vs @ConfigurationProperties
+
+👉 Answer:
+@Value → single property
+@ConfigurationProperties → group of properties
+---------------------------------------------------------------------------------------------------------------------
+❓ 20. What is lazy initialization?
+
+👉 Answer:
+Bean created only when needed
+@Lazy
+---------------------------------------------------------------------------------------------------------------------
+🔥 ADVANCED TRICK QUESTIONS (L2/L3)
+❓ 21. Why field injection is bad?
+
+👉 Hard to test
+👉 Breaks immutability
+👉 Reflection-based
+
+❓ 22. Can we run Spring Boot without Tomcat?
+👉 Yes
+Use:
+spring.main.web-application-type=none
+---------------------------------------------------------------------------------------------------------------------
+❓ 23. What is Circular Dependency?
+👉 A → B → A
+👉 Fix: Constructor redesign
+Use @Lazy
+---------------------------------------------------------------------------------------------------------------------
+❓ 24. What is DispatcherServlet?
+👉 Front controller of Spring MVC
+Flow:
+Request → DispatcherServlet → Controller → Response
+---------------------------------------------------------------------------------------------------------------------
+❓ 25. How does Spring Boot handle REST flow?
+👉 Flow: Client → Controller → Service → Repository → DB
+---------------------------------------------------------------------------------------------------------------------
+❓ 26. What is difference: PUT vs PATCH?
+👉 PUT → full update
+👉 PATCH → partial update
+---------------------------------------------------------------------------------------------------------------------
+❓ 27. How do you secure APIs?
+👉 Using: Spring Security
+JWT
+---------------------------------------------------------------------------------------------------------------------
+❓ 28. What happens if @Transactional is on private method?
+👉 ❌ Won’t work
+👉 Because: Spring uses proxy
+---------------------------------------------------------------------------------------------------------------------
+❓ 29. What is proxy in Spring?
+👉 Wrapper around bean to add features:
+Transactions
+Security
+---------------------------------------------------------------------------------------------------------------------
+❓ 30. How to handle large-scale configs?
+
+👉 Use:
+Config Server (Microservices)
+Externalized configs
+---------------------------------------------------------------------------------------------------------------------
+🎯 FINAL INTERVIEW POWER ANSWER
+
+👉 “Spring Boot simplifies development using auto-configuration, embedded servers, and starter dependencies
+, while internally managing beans via IoC and handling requests through DispatcherServlet.”
