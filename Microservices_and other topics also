@@ -552,5 +552,30 @@ step:-3 -> via pipline junit testing is done , if test cases fail then pipeline 
 step-4: -> then if success it moves to docker , where here an docker image is created and stores the service
 step-5: -> lastly jenkins deploys to kubernates , kubernates work is to make them live , by using load balancers, scaling, self healing
 -----------------------------------------------------------------------------------------------------------------------------
+What is Splunk?
+“In our project, we used Splunk for centralized logging and monitoring. Logs from all microservices were forwarded using Splunk forwarders and indexed centrally.
+We used SPL queries to debug issues, created dashboards to monitor API performance,
+and set up alerts for failures. We also used correlation IDs to trace requests across services.”
 -----------------------------------------------------------------------------------------------------------------------------
+❓ Why Splunk instead of logs in file?
+👉 Centralized + searchable + real-time alerts
+
+❓ What is index in Splunk?
+👉 Storage location for logs
+
+❓ How logs reach Splunk?
+👉 Using Forwarders
+
+❓ How do you debug distributed systems?
+👉 Using: Splunk
+Correlation ID
+
+❓ Splunk vs ELK?
+👉
+Splunk → Paid, easy UI
+ELK → Open-source, more setup
+
+🔥 Simple Analogy
+👉 SLF4J = Camera 📷 (captures data)
+👉 Splunk = CCTV Monitor 📺 (analyzes & shows data)
 -----------------------------------------------------------------------------------------------------------------------------
