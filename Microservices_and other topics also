@@ -543,6 +543,14 @@ SOME RELATED TO ANGULAR
 4. Data binding?
 👉 Answer:  Connect UI ↔ data
 -----------------------------------------------------------------------------------------------------------------------------
+
+How Jenkins works:
+
+step:1 -> After changing the code , the code is pushed to git
+step:2-> then jenkins creates a pipeline , 
+step:-3 -> via pipline junit testing is done , if test cases fail then pipeline also will fails
+step-4: -> then if success it moves to docker , where here an docker image is created and stores the service
+step-5: -> lastly jenkins deploys to kubernates , kubernates work is to make them live , by using load balancers, scaling, self healing
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------
