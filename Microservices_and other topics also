@@ -522,10 +522,10 @@ Use joins properly
 -----------------------------------------------------------------------------------------------------------------------------
 5. ACID properties?
 👉 Answer:
-Atomicity
-Consistency
-Isolation
-Durability
+Atomicity  // request should be unqiue 
+Consistency  // should not fail
+Isolation    // Every request its own space
+Durability   // request must be durable
 -----------------------------------------------------------------------------------------------------------------------------
 
 SOME RELATED TO ANGULAR
