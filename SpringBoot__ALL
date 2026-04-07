@@ -408,3 +408,138 @@ Like sending a WhatsApp message → receiver replies later
 👉 Answer:
 @Valid, @NotNull, @Size
 ------------------------------------------------------------------------------------
+
+🔥 Core Spring Boot Dependencies & What They Do
+1. ✅ spring-boot-starter-web
+👉 What it does: Used to build web applications & REST APIs
+
+👉 Includes:
+Spring MVC
+Embedded Tomcat (no need to install server)
+Jackson (JSON conversion)
+👉 Real-time example:
+
+You create APIs like:
+
+@GetMapping("/users")
+public List<User> getUsers() { ... }
+
+➡ This works because of spring-boot-starter-web
+------------------------------------------------------------------------------------------------------------------------
+2. ✅ spring-boot-starter-data-jpa
+👉 What it does: Used for database operations using JPA (ORM)
+
+👉 Includes:
+Hibernate
+JPA APIs
+Transaction management
+👉 Real-time example:
+public interface UserRepository extends JpaRepository<User, Long> {}
+
+➡ No SQL writing needed → JPA handles DB queries
+------------------------------------------------------------------------------------------------------------------------
+3. ✅ Database Driver (MySQL / PostgreSQL)
+
+Example:
+
+<dependency>
+  <groupId>com.mysql</groupId>
+  <artifactId>mysql-connector-j</artifactId>
+</dependency>
+👉 What it does: Allows your application to connect to the database
+
+👉 Real-time example:
+
+Without this, your Spring Boot app cannot talk to MySQL
+------------------------------------------------------------------------------------------------------------------------
+4. ✅ spring-boot-starter-security
+👉 What it does: Adds authentication & authorization
+
+👉 Includes:
+Login security
+Password encoding
+Role-based access
+👉 Real-time example:
+
+Secure APIs:
+
+@PreAuthorize("hasRole('ADMIN')")
+------------------------------------------------------------------------------------------------------------------------
+5. ✅ spring-boot-starter-validation
+👉 What it does: Used for input validation
+
+👉 Includes:
+Hibernate Validator
+👉 Real-time example:
+@NotNull
+@Email
+private String email;
+
+➡ Automatically validates request body
+------------------------------------------------------------------------------------------------------------------------
+6. ✅ spring-boot-starter-test
+👉 What it does: Used for unit & integration testing
+
+👉 Includes:
+JUnit
+Mockito
+Spring Test
+
+👉 Real-time example:
+@SpringBootTest
+class UserServiceTest { ... }
+------------------------------------------------------------------------------------------------------------------------
+7. ✅ spring-boot-devtools
+👉 What it does: Improves developer productivity
+
+👉 Features:
+Auto restart
+Live reload
+👉 Real-time example:
+Save file → app restarts automatically (no manual restart)
+------------------------------------------------------------------------------------------------------------------------
+8. ✅ spring-boot-starter-actuator
+👉 What it does: Provides monitoring & health checks
+
+👉 Real-time example:
+/actuator/health
+/actuator/metrics
+
+➡ Used in production with tools like Kubernetes
+------------------------------------------------------------------------------------------------------------------------
+9. ✅ spring-boot-starter-aop
+👉 What it does: Used for Aspect-Oriented Programming
+
+👉 Real-time example:
+Logging
+Security checks
+Transaction handling
+@Around("execution(* com.app.service.*.*(..))")
+------------------------------------------------------------------------------------------------------------------------
+10. ✅ spring-cloud-starter (Microservices)
+👉 What it does:
+Used in microservices architecture
+👉 Includes:
+Eureka (service discovery)
+Config Server
+Feign client
+Gateway
+------------------------------------------------------------------------------------------------------------------------
+👉 Real-time example:
+Service-to-service communication:
+@FeignClient("user-service")
+🧠 How to Answer in Interview (Best Way)
+------------------------------------------------------------------------------------------------------------------------
+If interviewer asks:
+👉 “What dependencies you used?”
+
+Say like this:
+“In my project, we used spring-boot-starter-web for REST APIs, spring-boot-starter-data-jpa for database operations with Hibernate, 
+MySQL driver for DB connectivity, and spring-boot-starter-security for authentication. We also used actuator for monitoring and devtools for faster development.”
+------------------------------------------------------------------------------------------------------------------------
+⚡ Pro Tip (Important)
+Don’t just say:
+❌ “We used JPA, Web, Security”
+------------------------------------------------------------------------------------------------------------------------
+Say:
+✅ “We used JPA to avoid writing SQL manually and handle ORM mapping between Java objects and database tables.”
