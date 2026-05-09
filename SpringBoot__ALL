@@ -5,6 +5,21 @@ It had services like user-service, product-service, and order-service.
 We used REST APIs for communication, MySQL for persistence, and deployed using Docker containers.
 We followed layered architecture and handled inter-service communication using REST and sometimes async messaging.”
 ------------------------------------------------------------------------------------
+
+CSRF protection is needed when:
+✅ Authentication uses:
+Session
+Cookies
+here stateful means sessionID is created in the IN Memory like cookies or session in the browser where session contains username and pwd ,so each request sessionID will be sent 
+after some time or logout that sessionID will be deleted . so username and pwd are storing in the database or IN Memory in session or cookies
+
+CSRF protection usually disabled when:
+✅ Authentication uses:
+JWT
+OAuth Bearer Tokens
+Stateless APIs --> means every request token is sent along with request
+                  here token will be expire after certain time need to regenerate it , here no cookies will be there to store the username or pwd . so stateless
+======================================================================
 all STATUS CODES 
 1XX -> All are related to informational  - these are rarely used
 2xx -> Success Responses  
