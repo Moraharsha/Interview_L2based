@@ -519,13 +519,68 @@ Use joins properly
 4. What is indexing?
 👉 Answer:
 “Improves query performance by faster lookup.”
+indexing is nothing but creating like same tables but there we store particular frquent columns related to actual table so that it directly gives output instead of searching
+in the table 
+
+ex:
+SELECT * FROM employee WHERE name='Vardhan';
+Row 1 → Rahul ❌
+Row 2 → Vardhan ✅
+Row 3 → Shiva ❌
+so it searches every row and gives you the data , 
+but if you create index and store harsha , the compiler directly goes to harsha row and gives the data .
 -----------------------------------------------------------------------------------------------------------------------------
 5. ACID properties?
 👉 Answer:
 Atomicity  // request should be unqiue 
+Atomicity means:
+Either ALL operations happen OR NONE happen.
+No partial execution.
+=====
 Consistency  // should not fail
+Consistency means:
+Database must remain valid before and after transaction.
+Rules should not break.
+=============
 Isolation    // Every request its own space
+Isolation means:
+Multiple transactions should not interfere with each other.
+Example:
+Two users booking same movie seat simultaneously.
+
+Without isolation:
+both may get same seat
+
+With isolation:
+one transaction completes first
+second waits or fails
+
+Simple Definition
+Isolation ensures concurrent transactions behave independently.
+================
 Durability   // request must be durable
+Durability means:
+
+Once transaction is committed, data is permanently saved.
+
+Even if:
+
+server crashes
+power failure happens
+
+data should not disappear.
+Example
+
+You transferred money successfully.
+
+Immediately server crashes.
+
+After restart:
+
+money transfer should still exist
+Simple Definition
+
+Durability guarantees permanent storage after commit.
 -----------------------------------------------------------------------------------------------------------------------------
 
 SOME RELATED TO ANGULAR
