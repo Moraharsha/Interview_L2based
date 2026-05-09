@@ -5,6 +5,72 @@ It had services like user-service, product-service, and order-service.
 We used REST APIs for communication, MySQL for persistence, and deployed using Docker containers.
 We followed layered architecture and handled inter-service communication using REST and sometimes async messaging.”
 ------------------------------------------------------------------------------------
+all STATUS CODES 
+1XX -> All are related to informational  - these are rarely used
+2xx -> Success Responses  
+200 -> get() returns bodies so OK
+201  -> post() success -> so created successfulluy
+202  -> accepted file  -> Request accepted but processing not completed yet 
+204 -> delete() -> but nothing returns after delete ->Success but no response body.
+=======================================================================================
+3xx -> Redirection Responses ie client must take another action
+301 -> URL changed
+304  -> not modified
+===============================================================================
+4xx -> Client errors - These happen because of client mistakes.
+400 -> Client sent invalid request. error in the http request like Example:
+Missing fields
+Invalid JSON
+Wrong datatype
+-------
+401 -> unathorized ->User is not authenticated
+No login
+Invalid username/password
+Missing token
+---------
+403 -> Forbidden-> no access ->User logged in successfully but has no permission
+------
+404 -> Not Found -> Http request not found -> API doesn't exist
+---------------------------
+405 ->  Method Not Allowed -> like get() instead of Post() like that
+------
+406 -> Not Acceptable
+Server cannot produce requested format.
+Example:
+Client asks XML but API returns only JSON.
+----------------
+408 ->  Request Timeout
+Request took too long.
+----------------
+429  -> Too Many Requests
+Too many API requests.
+===============================================================================
+5xx — ->Server Errors
+500 --> Internal Server Error
+Most common server error.
+--------------------------------------
+501 --> Not Implemented
+Feature/API not implemented
+---------------------------------------
+502 Bad Gateway
+One server received invalid response from another server.
+Mostly in:
+Microservices
+API Gateway
+------------------------------------------
+503 Service Unavailable
+Server temporarily unavailable.
+Example:
+Server down
+Maintenance
+Heavy traffic
+--------------------------------------
+504 Gateway Timeout
+Gateway server timed out waiting for another server.
+=================================================================================
+
+
+
 
 SPRING BOOT
 
